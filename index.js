@@ -38,37 +38,23 @@ app.get('/api/persons/:id', (request, response, next) => {
         .catch(error => next(error))
 
 })
-const errorHandler = (error, request, response, next) => {
-    console.error(error.message)
 
-    if (error.name === 'CastError' && error.kind == 'ObjectId') {
-        return response.status(400).send({ error: 'malformatted id' })
-    }
 
-    next(error)
-}
 
-app.use(errorHandler)
 //ADD
 app.post('/api/persons', (request, response, next) => {
     const body = request.body
-
-
-    if (!body.name || !body.number) {
-        return response.status(400).json({
-            error: 'Name or number is missing'
-        })
-    }
-
 
     const person = new Person({
         name: body.name,
         number: body.number,
 
     })
-    person.save().then(savedPerson => {
-        response.json(savedPerson.toJSON())
-    })
+    person.save()
+        .then(savedPerson => savedPerson.toJSON())
+        .then(saveAndFormattedPerson => {
+            response.json(saveAndFormattedPerson)
+        })
         .catch(error => next(error))
 
 
@@ -99,17 +85,32 @@ app.delete('/api/persons/:id', (request, response, next) => {
 
 })
 
+
 app.get('/', (req, res) => {
 
     res.send('<h1>Hello world</h1>')
 })
 app.get('/info', (req, res) => {
-    
-    let message = "Phonebook has info for " + Person.length+ " people"
+
+    let message = "Phonebook has info for " + Person.length + " people"
     let today = new Date();
     let date = today.toUTCString();
     res.send('<p>' + message + '</p><p>' + date + '</>')
 })
+const errorHandler = (error, request, response, next) => {
+    console.error("Error", error);
+    console.error("Error", error.message);
+  
+    if (error.name === "CastError" && error.kind == "ObjectId") {
+      console.log("CastError");
+      return response.status(400).send({ error: "malformatted id" });
+    } else if (error.name === "ValidationError") {
+      console.log("ValidationError");
+      return response.status(409).json({ error: error.message });
+    }
+    next(error);
+  };
+  app.use(errorHandler);
 
 const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
