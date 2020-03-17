@@ -11,7 +11,7 @@ const number = process.argv[4]
 
 const url =
     `mongodb+srv://grimmari-atlas:${password}@cluster0-1actz.mongodb.net/phonebook-app?retryWrites=true`
-//mongodb+srv://grimmari-atlas:<password>@cluster0-1actz.mongodb.net/test?retryWrites=true&w=majority
+
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true })
 if (process.argv.length === 3) {
     const personSchema = new mongoose.Schema({
