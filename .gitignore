@@ -1,0 +1,13 @@
+
+# dependencies
+node_modules
+index-v5
+_cacache
+_locks
+_logs
+_npx
+.env
+
+
+
+
