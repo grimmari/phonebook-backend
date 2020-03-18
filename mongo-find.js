@@ -23,15 +23,3 @@ Person.find({}).then(result => {
   })
   mongoose.connection.close()
 })
-
-
-
-
-
-
-
-
-
-
-
-//mongodb+srv://grimmari-atlas:<password>@cluster0-1actz.mongodb.net/test?retryWrites=true&w=majority
